@@ -1,0 +1,41 @@
+name: src-mirror
+
+on:
+  workflow_dispatch:
+    inputs:
+      git-ref:
+        description: 'Branch, tag or SHA to checkout'
+        required: true
+        default: 'main'
+  push:
+    tags:
+      - '*'
+  pull_request:
+    types:
+      - opened
+      - synchronize
+    paths:
+      - .github/workflows/src-mirror.yml
+
+concurrency:
+  group: src-mirror-${{ github.ref }}
+  cancel-in-progress: true
+
+  # Tar entire project west workspace, prune, and upload to artifact service.
+jobs:
+  standard:
+    runs-on:
+      - runs-on=${{ github.run_id }}
+      - runner=16cpu-linux-x64
+    steps:
+      - name: Upload src.tar.gz
+        uses: nrfconnect/action-src-mirror@main
+        with:
+          path: 'ncs-example-application'
+          west-update-args: ''
+          artifactory-path: >-
+            ${{ (github.ref_type != 'tag') &&
+              format('ncs-src-mirror/internal/{0}/{1}/src.tar.gz', github.event.repository.name, github.ref_name) ||
+              format('ncs-src-mirror/external/{0}/{1}/src.tar.gz', github.event.repository.name, github.ref_name) }}
+          artifactory-user: ${{ secrets.COM_NORDICSEMI_FILES_USERNAME }}
+          artifactory-pass: ${{ secrets.COM_NORDICSEMI_FILES_PASSWORD }}
