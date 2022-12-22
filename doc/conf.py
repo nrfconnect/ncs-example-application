@@ -6,7 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'Example Application'
+project = 'NCS Example Application'
 copyright = '2024, The Zephyr Community'
 author = 'The Zephyr Community'
 release = '1.0.0'
@@ -27,7 +27,15 @@ html_theme = 'alabaster'
 # -- Options for Intersphinx -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html
 
-intersphinx_mapping = {'zephyr': ('https://docs.zephyrproject.org/latest/', None)}
+intersphinx_mapping = {
+    'ncs': ('https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrf/', None),
+    'nrfx': ('https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrfx/', None),
+    'nrfxlib': ('https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/nrfxlib/', None),
+    'zephyr': ('https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/zephyr/', None),
+    'mcuboot': ('https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/mcuboot/', None),
+    'tfm': ('https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/tfm/', None),
+    'matter': ('https://developer.nordicsemi.com/nRF_Connect_SDK/doc/latest/matter/', None),
+}
 
 ## -- Options for Breathe ----------------------------------------------------
 # https://breathe.readthedocs.io/en/latest/index.html
@@ -35,6 +43,6 @@ intersphinx_mapping = {'zephyr': ('https://docs.zephyrproject.org/latest/', None
 # WARNING: please, check breathe maintainership status before using this
 # extension in production!
 
-breathe_projects = {'example-application': '_build_doxygen/xml'}
-breathe_default_project = 'example-application'
+breathe_projects = {'ncs-example-application': '_build_doxygen/xml'}
+breathe_default_project = 'ncs-example-application'
 breathe_default_members = ('members', )

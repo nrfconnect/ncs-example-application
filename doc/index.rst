@@ -1,7 +1,7 @@
-Welcome to Example Application's documentation!
-===============================================
+Welcome to NCS Example Application's documentation!
+===================================================
 
-This is a simple Sphinx documentation setup for ``example-application``.
+This is a simple Sphinx documentation setup for ``ncs-example-application``.
 
 .. toctree::
    :maxdepth: 2
@@ -9,7 +9,7 @@ This is a simple Sphinx documentation setup for ``example-application``.
 
    drivers/index
    lib/index
-   zephyr
+   references
 
 Indices and tables
 ==================
