@@ -1,0 +1,60 @@
+name: Build and test app in toolchain bundle environment
+
+on:
+  pull_request:
+
+jobs:
+  build-and-test-in-toolchain-bundle:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository with example application
+        uses: actions/checkout@v4
+        with:
+          path: example-application
+
+      - name: Prepare west project
+        run: |
+          python3 -m pip install west
+          west init -l example-application
+          west update -o=--depth=1 -n
+
+      - name: Install nrfutil and toolchain manager
+        run: |
+            wget -q https://files.nordicsemi.com/artifactory/swtools/external/nrfutil/executables/x86_64-unknown-linux-gnu/nrfutil
+            chmod +x nrfutil
+            ./nrfutil install toolchain-manager
+
+      - name: Find proper toolchain bundle
+        id: set-tb-id
+        run: echo "TOOLCHAIN_BUNDLE_NAME=ncs-toolchain-x86_64-linux-$(./nrf/scripts/print_toolchain_checksum.sh).tar.gz" >> $GITHUB_OUTPUT
+
+      - name: Restore toolchain bundle from cache
+        id: restore-cached-tb
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{steps.set-tb-id.outputs.TOOLCHAIN_BUNDLE_NAME}}
+          key: ${{steps.set-tb-id.outputs.TOOLCHAIN_BUNDLE_NAME}}
+
+      - name: Download toolchain bundle if not cached
+        if: steps.restore-cached-tb.outputs.cache-hit != 'true'
+        run: wget https://files.nordicsemi.com/artifactory/NCS/external/bundles/v3/${{steps.set-tb-id.outputs.TOOLCHAIN_BUNDLE_NAME}}
+
+      - name: Save toolchain bundle to cache
+        if: steps.restore-cached-tb.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{steps.set-tb-id.outputs.TOOLCHAIN_BUNDLE_NAME}}
+          key: ${{steps.set-tb-id.outputs.TOOLCHAIN_BUNDLE_NAME}}
+
+      - name: Install proper toolchain bundle
+        run: ./nrfutil toolchain-manager install --toolchain-bundle ${{steps.set-tb-id.outputs.TOOLCHAIN_BUNDLE_NAME}}
+
+      - name: Build firmware
+        run: |
+          ./nrfutil toolchain-manager launch --chdir example-application -- west twister -T app -v --inline-logs --integration
+
+      - name: Store hex files
+        uses: actions/upload-artifact@v4
+        with:
+          name: built-applications
+          path: example-application/twister-out/**/zephyr/zephyr.hex
