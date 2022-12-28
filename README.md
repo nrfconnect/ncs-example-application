@@ -38,13 +38,13 @@ environment. You can follow the official
 
 ### Initialization
 
-The first step is to initialize the workspace folder (``my-workspace``) where
-the ``example-application`` and all NCS modules will be cloned. You can do
+The first step is to initialize the workspace folder (`my-workspace`) where
+the `example-application` and all NCS modules will be cloned. You can do
 that by running:
 
 ```shell
 # initialize my-workspace for the example-application (main branch)
-west init -m https://github.com/nrfconnect/example-application --mr main my-workspace
+west init -m https://github.com/nrfconnect/ncs-example-application --mr main my-workspace
 # update NCS modules
 cd my-workspace
 west update
