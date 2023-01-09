@@ -1,6 +1,6 @@
 # nRF Connect SDK example application
 
-This repository contains an nRF Connect SDK (NCS) example application. The main
+This repository contains an nRF Connect SDK example application. The main
 purpose of this repository is to serve as a reference on how to structure nRF Connect
 SDK based applications. Some of the features demonstrated in this example are:
 
@@ -45,7 +45,7 @@ command:
 ```shell
 # initialize my-workspace for the ncs-example-application (main branch)
 west init -m https://github.com/nrfconnect/ncs-example-application --mr main my-workspace
-# update NCS modules
+# update nRF Connect SDK modules
 cd my-workspace
 west update
 ```
