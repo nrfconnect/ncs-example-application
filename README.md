@@ -18,7 +18,7 @@ This repository is versioned together with the [nRF Connect SDK main tree][sdk-n
 means that every time that nRF Connect SDK is tagged, this repository is tagged as well
 with the same version number, and the [manifest](west.yml) entry for `zephyr`
 will point to the corresponding nRF Connect SDK tag. For example, the `ncs-example-application`
-v2.3.0 will point to nRF Connect SDK v2.3.0. Note that the `main` branch always
+v2.4.0 will point to nRF Connect SDK v2.4.0. Note that the `main` branch always
 points to the development branch of nRF Connect SDK, also `main`.
 
 [app_dev]: https://docs.zephyrproject.org/latest/develop/application/index.html
@@ -55,7 +55,7 @@ west update
 To build the application, run the following command:
 
 ```shell
-west build -b $BOARD app
+west build -b $BOARD ncs-example-application/app
 ```
 
 where `$BOARD` is the target board.
