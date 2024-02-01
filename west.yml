@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Nordic Semiconductor ASA
+# Copyright (c) 2021-2024 Nordic Semiconductor ASA
 # SPDX-License-Identifier: Apache-2.0
 
 manifest:
@@ -13,5 +13,5 @@ manifest:
     - name: nrf
       remote: ncs
       repo-path: sdk-nrf
-      revision: main
+      revision: v2.4.3
       import: true
