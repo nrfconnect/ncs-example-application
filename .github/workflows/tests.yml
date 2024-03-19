@@ -1,4 +1,4 @@
-name: Build
+name: Tests
 
 on:
   push:
@@ -7,9 +7,9 @@ on:
     - cron: "0 0 * * *"
 
 jobs:
-  build:
+  tests:
     runs-on: ubuntu-22.04
-    container: ghcr.io/zephyrproject-rtos/ci:v0.26.2 
+    container: ghcr.io/zephyrproject-rtos/ci:v0.26.2
     env:
       CMAKE_PREFIX_PATH: /opt/toolchains
     steps:
@@ -24,7 +24,7 @@ jobs:
           west init -l .
           west update -o=--depth=1 -n
 
-      - name: Build firmware
+      - name: Twister Tests (app)
         working-directory: example-application
         run: |
           west twister -T app -v --inline-logs --integration
