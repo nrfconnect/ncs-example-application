@@ -1,0 +1,48 @@
+name: Build app in NCS docker container
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    container: ghcr.io/nrfconnect/sdk-nrf-toolchain:v2.6.0
+    steps:
+      - name: Checkout repository with example application
+        uses: actions/checkout@v4
+        with:
+          path: example-application
+
+      - name: Prepare west project
+        shell: bash
+        # /opt/entrypoint.sh is called to set environment variables inside docker container
+        # It is needed only when using docker container in GitHub Actions due to their limitation
+        # https://github.com/actions/runner/issues/1964
+        #
+        # qemu-system-arm is needed to enable tests on qemu platform
+        # libffi7 is needed to get libffi.so.7 required by Python3.9 on Ubuntu 22.04
+        run: |
+          source /opt/entrypoint.sh  
+          west init -l example-application
+          west update -o=--depth=1 -n
+          apt-get update && apt-get install -y qemu-system-arm libffi7
+
+      - name: Build firmware
+        working-directory: example-application
+        shell: bash
+        run: |
+          source /opt/entrypoint.sh
+          west twister -T app -v --inline-logs --integration
+
+      - name: Store hex files
+        uses: actions/upload-artifact@v4
+        with:
+          name: built-applications
+          path: example-application/twister-out/**/zephyr/zephyr.hex
+
+      - name: Twister Tests
+        working-directory: example-application
+        shell: bash
+        run: |
+          source /opt/entrypoint.sh
+          west twister -T tests -v --inline-logs --integration
