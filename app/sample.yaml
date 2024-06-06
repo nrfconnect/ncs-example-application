@@ -5,6 +5,7 @@ sample:
   description: Example application
   name: example-application
 common:
+  sysbuild: true
   build_only: true
   integration_platforms:
     - custom_plank
