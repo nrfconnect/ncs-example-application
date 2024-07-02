@@ -4,37 +4,16 @@ on:
   pull_request:
 
 jobs:
-  build-and-test-in-docker:
+  build-in-docker:
     runs-on: ubuntu-22.04
-    container: ghcr.io/nrfconnect/sdk-nrf-toolchain:v2.6.99
+    container:
+      image: ghcr.io/nrfconnect/sdk-nrf-toolchain:pr-16290  # steps in this job are executed inside sdk-nrf-toolchain container
+      env:
+        ACCEPT_JLINK_LICENSE: 1 # set if you want to install JLink
     defaults:
       run:
-        # Bash shell is needed to set toolchain related environment variables in docker container
-        # It is a workaround for GitHub Actions limitation https://github.com/actions/runner/issues/1964
-        shell: bash
+        shell: bash  # It is required to set `bash` as default shell
     steps:
-      - name: Checkout repository with example application
-        uses: actions/checkout@v4
-        with:
-          path: example-application
-
-      - name: Prepare west project
-        run: |
-          west init -l example-application
-          west update -o=--depth=1 -n
-
-      - name: Build firmware
-        working-directory: example-application
-        run: |
-          west twister -T app -v --inline-logs --integration
-
-      - name: Store hex files
-        uses: actions/upload-artifact@v4
-        with:
-          name: built-applications
-          path: example-application/twister-out/**/zephyr/zephyr.hex
-
-      - name: Twister Tests
-        working-directory: example-application
-        run: |
-          west twister -T tests -v --inline-logs --integration
+      - name: Run command in NCS toolchain environment
+        run: "west --version"  # This command is executed in bash shell `docker exec <container> bash -c west --version`)
+        # It will also install JLink if ACCEPT_JLINK_LICENSE is set to 1
