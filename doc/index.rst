@@ -9,7 +9,6 @@ This is a simple Sphinx documentation setup for ``ncs-example-application``.
 
    drivers/index
    lib/index
-   references
 
 Indices and tables
 ==================
