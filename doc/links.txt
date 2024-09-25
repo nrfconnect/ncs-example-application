@@ -1,0 +1,7 @@
+.. ### nRF Connect SDK documentation
+
+.. _`nRF Connect SDK`: https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/index.html
+.. _`Installing the nRF Connect SDK`: https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/installation/install_ncs.html
+
+.. _`Known issues for the nRF Connect SDK`: https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/releases_and_maturity/known_issues.html
+.. _`Release notes for the nRF Connect SDK`: https://docs.nordicsemi.com/bundle/ncs-latest/page/nrf/releases_and_maturity/release_notes.html
