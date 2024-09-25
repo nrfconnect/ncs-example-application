@@ -7,8 +7,8 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'NCS Example Application'
-copyright = '2024, The Zephyr Community'
-author = 'The Zephyr Community'
+copyright = '2024, Nordic Semiconductor'
+author = 'Nordic Semiconductor'
 release = '1.0.0'
 
 # -- General configuration ---------------------------------------------------
@@ -22,7 +22,7 @@ exclude_patterns = ['_build_sphinx', 'Thumbs.db', '.DS_Store']
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'alabaster'
+html_theme = 'sphinx_ncs_theme'
 
 ## -- Options for Breathe ----------------------------------------------------
 # https://breathe.readthedocs.io/en/latest/index.html
@@ -33,3 +33,8 @@ html_theme = 'alabaster'
 breathe_projects = {'ncs-example-application': '_build_doxygen/xml'}
 breathe_default_project = 'ncs-example-application'
 breathe_default_members = ('members', )
+
+# Include following files at the end of each .rst file.
+rst_epilog = """
+.. include:: /links.txt
+"""

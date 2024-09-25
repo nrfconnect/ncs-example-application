@@ -1,2 +1,3 @@
 Sphinx
 breathe
+sphinx-ncs-theme==0.7.4
