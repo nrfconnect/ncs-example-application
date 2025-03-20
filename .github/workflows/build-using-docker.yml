@@ -5,16 +5,19 @@ on:
   push:
 
 jobs:
-  set-tag:
+  set-image-tag:
     runs-on: ubuntu-22.04
+    outputs:
+      IMAGE_TAG: ${{ steps.set-output.outputs.IMAGE_TAG }}
     steps:
-      - name: Set dynamic tag
-        run: echo "IMAGE_TAG=v2.7.99" >> $GITHUB_ENV
+      - name: Compute or fetch container tag dynamically
+        id: set-output
+        run: echo "IMAGE_TAG=v2.7.99" >> $GITHUB_OUTPUT
 
   build-and-test-in-docker:
     runs-on: ubuntu-22.04
-    needs: set-tag
-    container: ghcr.io/nrfconnect/sdk-nrf-toolchain:${{ env.IMAGE_TAG }}
+    needs: set-image-tag
+    container: ghcr.io/nrfconnect/sdk-nrf-toolchain:${{ needs.set-image-tag.outputs.IMAGE_TAG }}
     defaults:
       run:
         # Bash shell is needed to set toolchain related environment variables in docker container
