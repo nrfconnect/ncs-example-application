@@ -5,11 +5,16 @@ on:
   push:
 
 jobs:
+  set-tag:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Set dynamic tag
+        run: echo "IMAGE_TAG=v2.7.99" >> $GITHUB_ENV
+
   build-and-test-in-docker:
-    runs-on:
-      - runs-on=${{ github.run_id }}
-      - runner=8cpu-linux-x64
-    container: ghcr.io/nrfconnect/sdk-nrf-toolchain:v2.7.99
+    runs-on: ubuntu-22.04
+    needs: set-tag
+    container: ghcr.io/nrfconnect/sdk-nrf-toolchain:${{ env.IMAGE_TAG }}
     defaults:
       run:
         # Bash shell is needed to set toolchain related environment variables in docker container
