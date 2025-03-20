@@ -6,7 +6,9 @@ on:
 
 jobs:
   build-and-test-in-docker:
-    runs-on: ubuntu-22.04
+    runs-on:
+      - runs-on=${{ github.run_id }}
+      - runner=8cpu-linux-x64
     container: ghcr.io/nrfconnect/sdk-nrf-toolchain:v2.7.99
     defaults:
       run:
