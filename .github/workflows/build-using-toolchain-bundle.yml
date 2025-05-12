@@ -24,10 +24,29 @@ jobs:
             chmod +x nrfutil
             ./nrfutil install toolchain-manager
 
+      - name: Find proper toolchain bundle
+        id: set-tb-id
+        run: echo "TOOLCHAIN_BUNDLE_NAME=ncs-toolchain-x86_64-linux-$(./nrf/scripts/print_toolchain_checksum.sh).tar.gz" >> $GITHUB_OUTPUT
+
+      - name: Restore toolchain bundle from cache
+        id: restore-cached-tb
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{steps.set-tb-id.outputs.TOOLCHAIN_BUNDLE_NAME}}
+          key: ${{steps.set-tb-id.outputs.TOOLCHAIN_BUNDLE_NAME}}
+
+      - name: Download toolchain bundle if not cached
+        if: steps.restore-cached-tb.outputs.cache-hit != 'true'
+        run: wget https://files.nordicsemi.com/artifactory/NCS/external/bundles/v3/${{steps.set-tb-id.outputs.TOOLCHAIN_BUNDLE_NAME}}
+
+      - name: Save toolchain bundle to cache
+        if: steps.restore-cached-tb.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{steps.set-tb-id.outputs.TOOLCHAIN_BUNDLE_NAME}}
+          key: ${{steps.set-tb-id.outputs.TOOLCHAIN_BUNDLE_NAME}}
+
       - name: Install proper toolchain bundle
-        run: |
-          TOOLCHAIN_ID=$(./nrf/scripts/print_toolchain_checksum.sh)
-          ./nrfutil toolchain-manager install --toolchain-bundle-id $TOOLCHAIN_ID
 
       - name: Build firmware
         run: |
