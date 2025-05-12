@@ -1,0 +1,40 @@
+name: Build and test app in toolchain bundle environment
+
+on:
+  pull_request:
+
+jobs:
+  build-and-test-in-toolchain-bundle:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository with example application
+        uses: actions/checkout@v4
+        with:
+          path: example-application
+
+      - name: Prepare west project
+        run: |
+          python3 -m pip install west
+          west init -l example-application
+          west update -o=--depth=1 -n
+
+      - name: Install nrfutil and toolchain manager
+        run: |
+            wget -q https://files.nordicsemi.com/artifactory/swtools/external/nrfutil/executables/x86_64-unknown-linux-gnu/nrfutil
+            chmod +x nrfutil
+            ./nrfutil install toolchain-manager
+
+      - name: Install proper toolchain bundle
+        run: |
+          TOOLCHAIN_ID=$(./nrf/scripts/print_toolchain_checksum.sh)
+          ./nrfutil toolchain-manager install --toolchain-bundle-id $TOOLCHAIN_ID
+
+      - name: Build firmware
+        run: |
+          ./nrfutil toolchain-manager launch --chdir example-application -- west twister -T app -v --inline-logs --integration
+
+      - name: Store hex files
+        uses: actions/upload-artifact@v4
+        with:
+          name: built-applications
+          path: example-application/twister-out/**/zephyr/zephyr.hex
