@@ -47,6 +47,7 @@ jobs:
           key: ${{steps.set-tb-id.outputs.TOOLCHAIN_BUNDLE_NAME}}
 
       - name: Install proper toolchain bundle
+        run: ./nrfutil toolchain-manager install --toolchain-bundle ${{steps.set-tb-id.outputs.TOOLCHAIN_BUNDLE_NAME}}
 
       - name: Build firmware
         run: |
