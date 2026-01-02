@@ -56,15 +56,34 @@ Follow the official
 
 ### Initialization
 
-The first step is to initialize the workspace folder (``my-workspace``) where
-the ``ncs-example-application`` and all nRF Connect SDK modules will be cloned. Run the following
-command:
+This section represents alternative approaches for initializing the workspace.
+
+#### Initialize workspace from scratch
+
+The first step is to initialize the workspace folder (``ncs``) where
+the ``ncs-example-application`` and all nRF Connect SDK modules will be cloned.
+Run the following commands:
 
 ```shell
-# initialize my-workspace for the ncs-example-application (main branch)
-west init -m https://github.com/nrfconnect/ncs-example-application --mr main my-workspace
-# update nRF Connect SDK modules
-cd my-workspace
+# Initialize ncs for the ncs-example-application (main branch)
+west init -m https://github.com/nrfconnect/ncs-example-application --mr main ncs
+# Update nRF Connect SDK modules
+cd ncs
+west update
+```
+
+#### Add application into existing nRF Connect SDK workspace
+
+Assume you have an existing nRF Connect SDK workspace in the ``ncs`` folder. Run the following commands:
+
+```shell
+# Navigate to the workspace folder
+cd ncs
+# Clone application repository
+git clone https://github.com/nrfconnect/ncs-example-application
+# Set manifest path to the application directory
+west config manifest.path ncs-example-application
+# Update nRF Connect SDK modules
 west update
 ```
 
