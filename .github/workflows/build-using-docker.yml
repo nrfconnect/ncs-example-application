@@ -3,6 +3,9 @@ name: Build and test app in NCS docker container
 on:
   pull_request:
   push:
+    branches:
+      - main
+      - 'v*-branch'
 
 jobs:
   set-image-tag:
