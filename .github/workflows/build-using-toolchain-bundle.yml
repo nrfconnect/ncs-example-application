@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository with example application
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           path: example-application
 
@@ -31,7 +31,7 @@ jobs:
 
       - name: Restore toolchain bundle from cache
         id: restore-cached-tb
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: ${{steps.set-tb-id.outputs.TOOLCHAIN_BUNDLE_NAME}}
           key: ${{steps.set-tb-id.outputs.TOOLCHAIN_BUNDLE_NAME}}
@@ -42,7 +42,7 @@ jobs:
 
       - name: Save toolchain bundle to cache
         if: steps.restore-cached-tb.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: ${{steps.set-tb-id.outputs.TOOLCHAIN_BUNDLE_NAME}}
           key: ${{steps.set-tb-id.outputs.TOOLCHAIN_BUNDLE_NAME}}
@@ -55,7 +55,7 @@ jobs:
           ./nrfutil toolchain-manager launch --chdir example-application -- west twister -T app -v --inline-logs --integration
 
       - name: Store hex files
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: built-applications
           path: example-application/twister-out/**/zephyr/zephyr.hex
